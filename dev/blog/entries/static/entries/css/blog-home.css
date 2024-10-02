@@ -1,0 +1,62 @@
+body {
+  padding-top: 56px;
+}
+
+.navbar-brand{ font-family: 'Bree Serif', serif; }
+
+.my-4{ 
+	font-family: 'Lexend Deca', sans-serif; 
+	font-size: 20px;
+	font-style: italic;
+}
+
+#login-css{ margin-top:105px; }
+
+#login-button{ 
+	margin-bottom:25px;
+	margin-top:15px;
+	margin-left:3px;
+}
+
+#content-css{ margin-top:105px !important; }
+
+#title-site{
+	font-family: 'Dancing Script', cursive;
+	font-size:25px;
+}
+
+footer{
+	font-family: 'Dancing Script', cursive;
+	font-size:25px;
+}
+
+.links-menu{
+	font-family: 'Dancing Script', cursive;
+	font-size:20px;
+	color: #FFFF00 !important;
+}
+
+.identifiants{
+	font-family: 'Montserrat', sans-serif;
+	font-size:15px;
+}
+
+.title-id{ 
+	color: #FF0000;  
+	font-style: italic;
+	font-weight: bold;
+}
+
+#title-log{
+	margin-top: 165px;
+	font-size: 35px;
+	text-align: center;
+	font-family: 'Dancing Script', cursive;
+}
+
+#link-log{
+	text-decoration:none; 
+}
+
+
+

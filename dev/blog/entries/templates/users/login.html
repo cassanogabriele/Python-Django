@@ -1,0 +1,21 @@
+{% extends "entries/base.html" %}
+
+{% block content %}
+<div class="col-md-8" id="login-css"> 
+    <div class="card mb-4 mt-4">        
+        <div class="card-header">
+           Se connecter à votre compte
+        </div>
+ 
+		<div class="card-b">
+           <form method="POST" style="margin-left:15px;margin-top:10px;">
+			{% csrf_token %}
+			
+			{{form.as_p}}
+			<button type="submit" class="btn btn-primary" id="login-button">Se connecter</button>
+		   </form>
+         </div>
+    </div>
+</div>
+{% endblock %}
+   

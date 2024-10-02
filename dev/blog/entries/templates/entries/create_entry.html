@@ -1,0 +1,22 @@
+{% extends "entries/base.html" %}
+
+{% block content %}
+<!-- Blog Entries Column -->
+<div class="col-md-8"> 
+    <div class="card mb-4 mt-4">        
+        <div class="card-header">
+           Créer un article de blog
+        </div>
+ 
+		<div class="card-b">
+           <form method="POST">
+			{% csrf_token %}
+			
+			{{form.as_p}}
+			<button type="submit" class="btn btn-primary">Envoyer l'article</button>
+		   </form>
+         </div>
+    </div>
+</div>
+{% endblock %}
+   
