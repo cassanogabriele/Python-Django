@@ -1,0 +1,21 @@
+{% extends "entries/base.html" %}
+
+{% block content %}
+<div class="col-md-8"> 
+    <div class="card mb-4 mt-4">        
+        <div class="card-header">
+           Créer un compte
+        </div>
+ 
+		<div class="card-b">
+           <form method="POST">
+			{% csrf_token %}
+			
+			{{form.as_p}}
+			<button type="submit" class="btn btn-primary">Créer un compte</button>
+		   </form>
+         </div>
+    </div>
+</div>
+{% endblock %}
+   

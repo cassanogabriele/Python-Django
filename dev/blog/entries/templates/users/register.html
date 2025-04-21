@@ -1,0 +1,54 @@
+{% extends "entries/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Créer un compte</h2>
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="id_username" class="form-label">Nom d'utilisateur</label>
+            <input type="text" name="username" id="id_username" class="form-control" placeholder="Entrez un nom d'utilisateur" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="id_username" class="form-label">Nom</label>
+          <input type="text" name="last_name" id="id_name" class="form-control" placeholder="Entrez votre nom" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="id_username" class="form-label">Prénom</label>
+          <input type="text" name="first_name" id="id_firstname" class="form-control" placeholder="Entrez votre prénom" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_email" class="form-label">Adresse e-mail</label>
+            <input type="email" name="email" id="id_email" class="form-control" placeholder="Entrez une adresse email" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_password1" class="form-label">Mot de passe</label>
+            <input type="password" name="password1" id="id_password1" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_password2" class="form-label">Confirmation du mot de passe</label>
+            <input type="password" name="password2" id="id_password2" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Créer un compte</button>
+    </form>
+
+    {% if form.errors %}
+        <div class="alert alert-danger mt-3">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
