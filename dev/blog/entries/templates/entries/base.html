@@ -1,96 +1,107 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+	<html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Blog de discussion pour les fans de Rock N' Roll et de Metal">
-  <meta name="author" content="Cassano Gabriele">
+		<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="Blog de discussion pour les fans de Rock N' Roll et de Metal">
+		<meta name="author" content="Cassano Gabriele">
 
-  <title>Discussions pour Développement web</title>
+		<title>Discussions pour Développement web</title>
 
-  <!-- Inclure Boostrap -->
-  <link href="{% static 'entries/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-  <!-- Inclure les css personnalisés -->
-  <link href="{% static 'entries/css/blog-home.css' %}" rel="stylesheet">
-  <!-- Inclure des google fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Poppins&display=swap" rel="stylesheet"> 
-  <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet"> 
-</head>
+		<style>
+		body {
+			padding-top: 56px;
+			padding-bottom: 100px; 
+		}
+		</style>
 
-<body>
-	<!-- Navigation -->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-		<div class="container">
-			<a class="navbar-brand" id="title-site" href="{% url 'blog-home' %}">Discussions pour Développement web</a>
-			
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			
-			
-			<div class="collapse navbar-collapse" id="navbarResponsive">
-				<ul class="navbar-nav ml-auto">
-					{% if user.is_authenticated %}
-						<li class="nav-item">
-							<a class="nav-link links-menu" href="{% url 'create_entry' %}">Poster maintenant</a>
-						</li>
-						<li class="nav-item">
-							<form method="post" action="{% url 'logout' %}">
-								{% csrf_token %}
-								<button type="submit" class="btn btn-danger mt-1">Se déconnecter</button>
-							</form>							
-						</li>
-					{% else %} 
-						<li class="nav-item">
-							<a class="nav-link links-menu" href="{% url 'register' %}">S'enregistrer</a>
-						</li>
-					{% endif %}
-				</ul>
-			</div>			
-		</div>
-  </nav>
+		<!-- Inclure Boostrap -->
+		<link href="{% static 'entries/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+		<!-- Inclure les css personnalisés -->
+		<link href="{% static 'entries/css/blog-home.css' %}" rel="stylesheet">
+		<!-- Inclure des google fonts -->
+		<link href="https://fonts.googleapis.com/css?family=Dancing+Script|Poppins&display=swap" rel="stylesheet"> 
+		<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet"> 
+		</head>
 
-	<!-- Contenu de la page -->
-	<div class="container">
-		<div class="row">
-			{% block content %} {% endblock %}	
+	<body>
+		<!-- Navigation -->
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+			<div class="container">
+				<a class="navbar-brand" id="title-site" href="{% url 'blog-home' %}">Discussions pour Développement web</a>
+				
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				
+				
+				<div class="collapse navbar-collapse" id="navbarResponsive">
+					<ul class="navbar-nav ml-auto">
+						{% if user.is_authenticated %}
+							<li class="nav-item">
+								<a class="nav-link links-menu" href="{% url 'user-entries' %}">Mes discussions</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link links-menu" href="{% url 'create_entry' %}">Poster maintenant</a>
+							</li>
+							<li class="nav-item">
+								<form method="post" action="{% url 'logout' %}">
+									{% csrf_token %}
+									<button type="submit" class="btn btn-danger mt-1">Se déconnecter</button>
+								</form>							
+							</li>
 
-			{% if user.is_authenticated %}	
-			<div class="col-md-4" id="content-css"> 
-				<div class="card my-4">
-				  <h5 class="card-header">Informations enregistrées</h5>
-					<div class="card-body">           
-						<ul class="list-unstyled mb-0">
-						  <li>
-							<p class="identifiants"><span class="title-id">Nom d'utilisateur :</span> {{user.username}}</p>
-							<p class="identifiants"><span class="title-id">Nom :</span> {{user.last_name}}</p>
-							<p class="identifiants"><span class="title-id">Prénom :</span> {{user.first_name}}</p>
-							<p class="identifiants"><span class="title-id">Email :</span> {{user.email}}</p>
-						  </li>						              
-						</ul>              
+							<li class="nav-item">
+								<span class="nav-link links-menu">Bonjour {{ user.first_name }}</span>
+							</li>
+						{% else %} 
+							<li class="nav-item">
+								<a class="nav-link links-menu" href="{% url 'register' %}">S'enregistrer</a>
+							</li>
+						{% endif %}
+					</ul>
+				</div>			
+			</div>
+		</nav>
+
+		<!-- Contenu de la page -->
+		<div class="container mb-5">
+			<div class="row">
+				{% block content %} {% endblock %}	
+
+				{% if user.is_authenticated %}	
+				<div class="col-md-4" id="content-css"> 
+					<div class="card my-4">
+					<h5 class="card-header bg-success text-white">Informations enregistrées</h5>
+						<div class="card-body">           
+							<ul class="list-unstyled mb-0">
+							<li>
+								<p class="identifiants"><span class="text-success font-weight-bold">Nom d'utilisateur :</span> {{user.username}}</p>
+								<p class="identifiants"><span class="text-success font-weight-bold">Nom :</span> {{user.last_name}}</p>
+								<p class="identifiants"><span class="text-success font-weight-bold">Prénom :</span> {{user.first_name}}</p>
+								<p class="identifiants"><span class="text-success font-weight-bold">Email :</span> {{user.email}}</p>
+							</li>						              
+							</ul>              
+						</div>
 					</div>
-				</div>
-			</div>  
-			{% endif %}
-		</div>
-	</div>
-  </div>
+				</div>  
+				{% endif %}
+			</div>
+		</div>	
 
-  <!-- Footer -->
-  <footer class="py-5 bg-dark" style="position: fixed;left: 0;bottom: 0;width: 100%;background-color: red;color: white;text-align: center;">
-    <div class="container">
-      <p class="m-0 text-center text-white">Copyright &copy; <a style="text-decoration:none;" href="https://gabriel-cassano.be/">Gabriele Cassano</a> - 2019</p>
-    </div>
-    <!-- /.container -->
-  </footer>
+		<!-- Footer -->
+		<footer class="py-5 bg-dark" style="position: fixed;left: 0;bottom: 0;width: 100%;background-color: red;color: white;text-align: center;">
+			<div class="container">
+			<p class="m-0 text-center text-white">Copyright &copy; <a style="text-decoration:none;" href="https://gabriel-cassano.be/">Gabriele Cassano</a> - 2019</p>
+			</div>
+			<!-- /.container -->
+		</footer>
 
-  <!-- Bootstrap core JavaScript -->
-  <script src="{% static 'entries/vendor/jquery/jquery.min.js' %}"></script>
-  <script src="{% static 'entries/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
-</body>
-
+		<!-- Bootstrap core JavaScript -->
+		<script src="{% static 'entries/vendor/jquery/jquery.min.js' %}"></script>
+		<script src="{% static 'entries/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+	</body>
 </html>

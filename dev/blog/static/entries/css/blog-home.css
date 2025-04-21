@@ -31,20 +31,12 @@ footer{
 }
 
 .links-menu{
-	font-family: 'Dancing Script', cursive;
 	font-size:20px;
 	color: #FFFF00 !important;
 }
-
 .identifiants{
 	font-family: 'Montserrat', sans-serif;
 	font-size:15px;
-}
-
-.title-id{ 
-	color: #FF0000;  
-	font-style: italic;
-	font-weight: bold;
 }
 
 #title-log{

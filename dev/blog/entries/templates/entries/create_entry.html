@@ -5,21 +5,18 @@
 <div class="col-md-8"> 
     <div class="card mb-4 mt-4"> 
         <div class="card-header bg-primary text-white">
-            <h5>Créer un article de blog<</h5>
+            <h5>Créer un article de blog</h5>
         </div>
-
 
         <div class="card-body">
             <form method="POST">
                 {% csrf_token %}
                 
-                <!-- Titre de l'article -->
                 <div class="mb-3">
                     <label for="id_title" class="form-label">Titre de l'article</label>
                     <input type="text" name="entry_title" id="id_title" class="form-control" placeholder="Entrez le titre de votre article" required>
                 </div>
 
-                <!-- Texte de l'article -->
                 <div class="mb-3">
                     <label for="id_text" class="form-label">Texte de l'article</label>
                     <textarea name="entry_text" id="id_text" class="form-control" rows="5" placeholder="Entrez le contenu de votre article" required></textarea>

@@ -3,18 +3,30 @@
 {% block content %}
 <div class="col-md-8" id="login-css"> 
     <div class="card mb-4 mt-4">        
-        <div class="card-header">
+        <div class="card-header bg-primary text-white">
            Se connecter à votre compte
         </div>
- 
-		<div class="card-b">
-           <form method="POST" style="margin-left:15px;margin-top:10px;">
-			{% csrf_token %}
-			
-			{{form.as_p}}
-			<button type="submit" class="btn btn-primary" id="login-button">Se connecter</button>
-		   </form>
-         </div>
+
+        
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                
+                <!-- Titre de l'article -->
+                <div class="mb-3">
+                    <label for="id_title" class="form-label">Nom d'utilisateur</label>
+                    <input type="text" name="username" id="id_user_name" class="form-control" placeholder="Entrez le titre de votre article" required>
+                </div>
+
+                <!-- Texte de l'article -->
+                <div class="mb-3">
+                    <label for="id_text" class="form-label">Texte de l'article</label>
+                    <input type="password" name="password" id="id_password" class="form-control" placeholder="Entrez le titre de votre article" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="login-button">Se connecter</button>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}
