@@ -86,6 +86,37 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Connection à une base de données MySql
 
+# En Prod
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'c0discussionsweb',  
+        'USER': 'c0discussionsweb',       
+        'PASSWORD': 'pihvSycR_PF4C',       
+        'HOST': '127.0.0.1',  
+        'PORT': '',       
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
+    }
+}
+'''
+
+# En local
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'discussions_web',  
+        'USER': 'root',       
+        'PASSWORD': '',       
+        'HOST': '127.0.0.1',  
+        'PORT': '',       
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
+    }
+}
 
 
 # Password validation

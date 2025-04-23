@@ -12,12 +12,21 @@
             <h2 class="card-title">{{ entry.entry_title }}</h2>
             <p class="card-text">{{ entry.entry_text|truncatechars:100 }}</p>
             <a href="{% url 'entry-detail' entry.pk %}" class="btn btn-primary">Lire plus &rarr;</a>
-         </div>
+        </div>
  
 		<div class="card-footer text-muted">
             Publié le {{ entry.entry_date }} par
-           <a href="#">{{ entry.entry_author }}</a>
-         </div>
+            <a href="#">{{ entry.entry_author }}</a>
+
+            <!-- Bouton cœur toujours rempli en jaune -->
+            <form action="{% url 'toggle-wishlist' pk=entry.pk %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                
+                <button type="submit" class="btn btn-link text-warning float-right ml-2" style="font-size: 24px;">
+                    <i class="fas fa-heart"></i>
+                </button>
+            </form>
+        </div>
     </div>
 	{% endfor %} 
 
@@ -39,4 +48,3 @@
 	{% endif %}
 </div>
 {% endblock %}
-   

@@ -8,7 +8,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.core.exceptions import PermissionDenied
-from .models import Entry
+from .models import Entry, Wishlist, WishlistItem
 
 class HomeView(LoginRequiredMixin, ListView):
     model = Entry
@@ -95,3 +95,71 @@ class DeleteEntryView(LoginRequiredMixin, View):
             return redirect('user-entries')  # Redirige vers la liste des articles de l'utilisateur
         except Entry.DoesNotExist:
             raise Http404("Discussion non trouvée")
+        
+from django.shortcuts import render, redirect
+from django.views import View
+from django.contrib import messages
+from .models import Entry, Wishlist, WishlistItem
+
+class ToggleWishlistView(View):
+    def get(self, request, pk):
+        try:
+            entry = Entry.objects.get(pk=pk)
+            wishlists = Wishlist.objects.filter(user=request.user)
+            creating_new = not wishlists.exists()
+
+            return render(request, 'entries/create_wishlist.html', {
+                'entry': entry,
+                'user_wishlists': wishlists,
+                'creating_new': creating_new
+            })
+
+        except Entry.DoesNotExist:
+            messages.error(request, "L'article n'existe pas.")
+            return redirect('blog-home')
+
+    def post(self, request, pk):
+        try:
+            entry = Entry.objects.get(pk=pk)
+            wishlists = Wishlist.objects.filter(user=request.user)
+            creating_new = not wishlists.exists()
+
+            if creating_new:
+                wishlist_name = request.POST.get("wishlist_name")
+                if wishlist_name:
+                    wishlist = Wishlist.objects.create(name=wishlist_name, user=request.user)
+                    WishlistItem.objects.create(wishlist=wishlist, entry=entry)
+                    messages.success(request, f'La wishlist "{wishlist.name}" a été créée et l\'article y a été ajouté.')
+                    return redirect('blog-home')  # ✅ on redirige vers l'accueil si on a créé une liste
+                else:
+                    messages.error(request, "Veuillez entrer un nom pour la wishlist.")
+                    return redirect('toggle-wishlist', pk=pk)
+
+            else:
+                wishlist_id = request.POST.get("wishlist")
+                try:
+                    wishlist = Wishlist.objects.get(id=wishlist_id, user=request.user)
+                    WishlistItem.objects.create(wishlist=wishlist, entry=entry)
+                    messages.success(request, f'L\'article a été ajouté à la wishlist "{wishlist.name}".')
+                except Wishlist.DoesNotExist:
+                    messages.error(request, "La wishlist sélectionnée n'existe pas.")
+
+                return redirect('toggle-wishlist', pk=pk)  # ✅ on reste sur la même page si pas de création
+
+        except Entry.DoesNotExist:
+            messages.error(request, "L'article n'existe pas.")
+            return redirect('blog-home')
+
+class CreateWishlistView(LoginRequiredMixin, CreateView):
+    model = Wishlist
+    template_name = 'entries/create_wishlist.html'
+    fields = ['name']
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        messages.success(self.request, "Votre nouvelle liste d'envies a été créée avec succès.")
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        # Redirige l'utilisateur vers la page des wishlists après la création
+        return reverse_lazy('wishlists')  # Rediriger vers la page des wishlists après création

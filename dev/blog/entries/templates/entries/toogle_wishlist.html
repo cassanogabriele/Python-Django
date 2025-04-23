@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h2>Votre Liste d'Envies</h2>
+    {% if wishlist_entries %}
+        <ul>
+            {% for item in wishlist_entries %}
+                <li>
+                    <a href="{% url 'entry-detail' pk=item.entry.pk %}">{{ item.entry.entry_title }}</a>
+                    <!-- Ajouter un bouton pour retirer l'article de la wishlist -->
+                    <form action="{% url 'remove-from-wishlist' pk=item.pk %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Retirer</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Vous n'avez aucune discussion dans votre liste d'envies.</p>
+    {% endif %}
+{% endblock %}
