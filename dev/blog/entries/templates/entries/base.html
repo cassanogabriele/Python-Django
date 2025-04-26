@@ -63,9 +63,13 @@
 								<span class="nav-link links-menu">Bonjour {{ user.first_name }}</span>
 							</li>
 
+							{% if user.wishlist_set.exists %}
 							<li class="nav-item">
-								<a class="nav-link links-menu" href="{% url 'wishlist-list' %}"><i class="fas fa-heart"></i></a>								
+								<a class="nav-link links-menu" href="{% url 'wishlist-list' %}">
+									<i class="fas fa-heart"></i>
+								</a>								
 							</li>
+							{% endif %}
 						{% else %} 
 							<li class="nav-item">
 								<a class="nav-link links-menu" href="{% url 'register' %}">S'enregistrer</a>
