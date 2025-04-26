@@ -44,6 +44,9 @@
 					<ul class="navbar-nav ml-auto">
 						{% if user.is_authenticated %}
 							<li class="nav-item">
+								<a class="nav-link links-menu" href="{% url 'blog-home' %}">Discussions</a>
+							</li>
+							<li class="nav-item">
 								<a class="nav-link links-menu" href="{% url 'user-entries' %}">Mes discussions</a>
 							</li>
 							<li class="nav-item">
@@ -58,6 +61,10 @@
 
 							<li class="nav-item">
 								<span class="nav-link links-menu">Bonjour {{ user.first_name }}</span>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link links-menu" href="{% url 'wishlist-list' %}"><i class="fas fa-heart"></i></a>								
 							</li>
 						{% else %} 
 							<li class="nav-item">

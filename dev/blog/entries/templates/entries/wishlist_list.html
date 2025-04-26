@@ -1,0 +1,57 @@
+{% extends "entries/base.html" %}
+
+{% block content %}
+<div class="col-md-8"> 
+    {% if messages %}
+        <div class="alert alert-success alert-dismissible fade show mt-5 mb-4" role="alert">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
+
+
+    <h2 class="mb-4 mt-3">Listes de souhaits</h2>
+
+    {% for wishlist in wishlists %}
+    <div class="card mb-4 mt-4"> 
+        <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">{{ wishlist.name }}</h5>
+        </div>
+
+        <div class="card-body">
+            {% if wishlist.items.all %}
+            <ul class="list-group list-group-flush">
+                {% for item in wishlist.items.all %}
+                    <li class="list-group-item">
+                        <div class="card mb-4 mt-4"> 
+                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">Titre : {{ item.entry.entry_title }}</h5>
+
+                                <form method="post" action="{% url 'delete-wishlist-item' item.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm" title="Supprimer">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>                                                          
+                            </div>
+        
+                            <div class="card-body">
+                                {{ item.entry.entry_text }}
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+                <p class="text-muted">Aucun article dans cette wishlist.</p>
+            {% endif %}
+        </div>        
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
