@@ -20,6 +20,7 @@
     <div class="card mb-4 mt-4">
         <div class="card-body">
             <h2 class="card-title">{{ entry.entry_title }}</h2>
+            <p class="card-text text-success font-weight-bold">Sujet : {{ entry.subject }}</p>
             <p class="card-text">{{ entry.entry_text|truncatechars:100 }}</p>
             <a href="{% url 'entry-detail' entry.pk %}" class="btn btn-primary">Lire plus &rarr;</a>
         </div>

@@ -5,21 +5,25 @@
     <div class="card mb-4 mt-4">        
         <div class="card-body">
             <h2 class="card-title">{{ object.entry_title }}</h2>
+            <p class="card-text text-success font-weight-bold">Sujet : {{ object.subject }}</p>
             <p class="card-text">{{ object.entry_text|linebreaks }}</p>         
         </div>
 
         <div class="card-footer text-muted">
             Publié le {{ object.entry_date|date:"d F Y" }}
-            {% if not from_user_entries %}
-                par <a href="#">{{ object.entry_author }}</a>
-            {% endif %}
             
-            {% if from_user_entries %}
-                <a href="{% url 'edit-entry' pk=object.pk %}" class="btn btn-success float-right ml-2">Modifier</a>                
-                <form action="{% url 'delete-entry' pk=object.pk %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger float-right ml-2">Supprimer</button>
-                </form>
+            {% if from_home %}
+                <!-- Si l'utilisateur vient de la page d'accueil, afficher l'auteur et pas les boutons -->
+                par <a href="#">{{ object.entry_author }}</a>
+            {% else %}
+                <!-- Si l'utilisateur est sur ses propres discussions, afficher les boutons sans l'auteur -->
+                {% if object.entry_author == request.user %}
+                    <a href="{% url 'edit-entry' pk=object.pk %}" class="btn btn-success float-right ml-2">Modifier</a>
+                    <form action="{% url 'delete-entry' pk=object.pk %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger float-right ml-2">Supprimer</button>
+                    </form>
+                {% endif %}
             {% endif %}
         </div>		 
     </div>

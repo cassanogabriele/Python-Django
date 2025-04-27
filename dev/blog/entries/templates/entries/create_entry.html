@@ -11,6 +11,11 @@
         <div class="card-body">
             <form method="POST">
                 {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="id_style">Sujet</label>
+                    {{ form.subject }}
+                </div>
                 
                 <div class="mb-3">
                     <label for="id_title" class="form-label">Titre de l'article</label>
@@ -20,7 +25,7 @@
                 <div class="mb-3">
                     <label for="id_text" class="form-label">Texte de l'article</label>
                     <textarea name="entry_text" id="id_text" class="form-control" rows="5" placeholder="Entrez le contenu de votre article" required></textarea>
-                </div>
+                </div>               
 
                 <button type="submit" class="btn btn-primary">Envoyer l'article</button>
             </form>

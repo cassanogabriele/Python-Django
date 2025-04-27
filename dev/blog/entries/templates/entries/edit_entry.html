@@ -2,11 +2,17 @@
 
 {% block content %}
 <div class="col-md-8">
-    <h2 class="mb-4">Modifier la discussion</h2>
+    <h1 class="my-4">Modifier la discussion</h1>
+
     <div class="card mb-4 mt-4">
         <div class="card-body">
             <form method="post">
                 {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="id_style">Suject</label>
+                    {{ form.subject }}
+                </div>
 
                 <div class="mb-3">
                     <label for="entry_title" class="form-label">Titre de l'article</label>

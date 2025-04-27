@@ -2,12 +2,20 @@ from django.db import models
 
 from django.contrib.auth.models import User
 
-# Create your models here.
-class Entry(models.Model):
+class Entry(models.Model):  
+    SUBJECT_CHOICES = [
+        ('PHP', 'PHP'),
+        ('JavaScript', 'JavaScript'),
+        ('Frameworks', 'Frameworks'),
+        ('CMS', 'CMS'),
+        ('GIT', 'GIT'),
+    ]
+
     entry_title = models.CharField(max_length=50)
     entry_text = models.TextField()
     entry_date = models.DateTimeField(auto_now_add=True)
     entry_author = models.ForeignKey(User, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=50, choices=SUBJECT_CHOICES, default='autre')  # Champ subject
 
     class Meta:
       verbose_name_plural = "entries"

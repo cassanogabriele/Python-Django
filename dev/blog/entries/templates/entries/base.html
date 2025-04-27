@@ -42,11 +42,26 @@
 				
 				<div class="collapse navbar-collapse" id="navbarResponsive">
 					<ul class="navbar-nav ml-auto">
+						<form method="get" action="{% url 'blog-home' %}">
+							<div class="form-group">
+								<select name="subject" id="subject" class="form-control" onchange="this.form.submit()">
+									<option value="">Discussions</option>
+									<option value="PHP" {% if request.GET.subject == 'PHP' %}selected{% endif %}>PHP</option>
+									<option value="JavaScript" {% if request.GET.subject == 'JavaScript' %}selected{% endif %}>JavaScript</option>
+									<option value="Frameworks" {% if request.GET.subject == 'Frameworks' %}selected{% endif %}>Frameworks</option>
+									<option value="CMS" {% if request.GET.subject == 'CMS' %}selected{% endif %}>CMS</option>
+									<option value="GIT" {% if request.GET.subject == 'GIT' %}selected{% endif %}>GIT</option>
+								</select>
+							</div>
+						</form>			
+
 						{% if user.is_authenticated %}
-							<li class="nav-item">
+							<!-- <li class="nav-item">
 								<a class="nav-link links-menu" href="{% url 'blog-home' %}">Discussions</a>
-							</li>
-							<li class="nav-item">
+							</li>-->
+							
+							
+							<li class="nav-item ml-1">
 								<a class="nav-link links-menu" href="{% url 'user-entries' %}">Mes discussions</a>
 							</li>
 							<li class="nav-item">

@@ -19,9 +19,18 @@ class HomeView(LoginRequiredMixin, ListView):
     ordering = ['-entry_date']
     paginate_by = 3
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        subject = self.request.GET.get('subject')
+
+        if subject:
+            queryset = queryset.filter(subject=subject)
+
+        return queryset
+
     def dispatch(self, request, *args, **kwargs):
-        # Vide les anciens messages
-        list(messages.get_messages(request))
+        # Marquer la session pour indiquer que l'utilisateur vient de la page d'accueil
+        request.session['from_home'] = True
         return super().dispatch(request, *args, **kwargs)
     
 class EntryView(DetailView):
@@ -30,14 +39,19 @@ class EntryView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Vérifie si la variable de session existe
-        context['from_user_entries'] = self.request.session.get('from_user_entries', False)
-        return context
 
+        # Vérifie si l'utilisateur vient de la page d'accueil en récupérant la session
+        context['from_home'] = self.request.session.get('from_home', False)
+
+        # Réinitialiser la session 'from_home' après l'utilisation
+        self.request.session['from_home'] = False
+        
+        return context
+    
 class CreateEntryView(LoginRequiredMixin, CreateView):
     model = Entry
     template_name = "entries/create_entry.html"
-    fields = ['entry_title', 'entry_text']
+    fields = ['entry_title', 'entry_text', 'subject']
 
     def form_valid(self, form):
         form.instance.entry_author = self.request.user
@@ -59,10 +73,9 @@ class UserEntriesView(LoginRequiredMixin, ListView):
         self.request.session['from_user_entries'] = True
         return Entry.objects.filter(entry_author=self.request.user)
 
-
 class EditEntryView(LoginRequiredMixin, UpdateView):
     model = Entry
-    fields = ['entry_title', 'entry_text']
+    fields = ['entry_title', 'entry_text', 'subject']
     template_name = 'entries/edit_entry.html'
 
     def get_object(self, queryset=None):
@@ -160,7 +173,6 @@ class ToggleWishlistView(View):
         except Entry.DoesNotExist:
             messages.error(request, "L'article n'existe pas.")
             return redirect('blog-home')  # Si l'article n'existe pas, redirection vers la page d'accueil
-
 
 class CreateWishlistView(LoginRequiredMixin, CreateView):
     model = Wishlist
