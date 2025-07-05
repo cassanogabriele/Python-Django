@@ -125,54 +125,60 @@ class ToggleWishlistView(View):
     def get(self, request, pk):
         try:
             entry = Entry.objects.get(pk=pk)
-            wishlists = Wishlist.objects.filter(user=request.user)
-            creating_new = not wishlists.exists()
-
-            return render(request, 'entries/create_wishlist.html', {
-                'entry': entry,
-                'user_wishlists': wishlists,
-                'creating_new': creating_new
-            })
-
         except Entry.DoesNotExist:
             messages.error(request, "L'article n'existe pas.")
-            return redirect('blog-home')  # Redirection vers l'accueil si l'article n'est pas trouvé
+            return redirect('blog-home')
+
+        user_wishlists = Wishlist.objects.filter(user=request.user)
+        creating_new = not user_wishlists.exists()
+
+        return render(request, 'entries/create_wishlist.html', {
+            'entry': entry,
+            'user_wishlists': user_wishlists,
+            'creating_new': creating_new
+        })
 
     def post(self, request, pk):
         try:
             entry = Entry.objects.get(pk=pk)
-            wishlists = Wishlist.objects.filter(user=request.user)
-            creating_new = not wishlists.exists()
-
-            # Si la wishlist est nouvelle, on la crée
-            if creating_new:
-                wishlist_name = request.POST.get("wishlist_name")
-                if wishlist_name:
-                    # Création de la nouvelle wishlist
-                    wishlist = Wishlist.objects.create(name=wishlist_name, user=request.user)
-                    WishlistItem.objects.create(wishlist=wishlist, entry=entry)
-                    messages.success(request, f'La wishlist "{wishlist.name}" a été créée et l\'article y a été ajouté.')
-                else:
-                    messages.error(request, "Veuillez entrer un nom pour la wishlist.")
-                    return redirect('toggle-wishlist', pk=pk)  # Si nom vide, on reste sur la page actuelle
-
-            else:
-                wishlist_id = request.POST.get("wishlist")
-                try:
-                    # Ajout de l'article à une wishlist existante
-                    wishlist = Wishlist.objects.get(id=wishlist_id, user=request.user)
-                    WishlistItem.objects.create(wishlist=wishlist, entry=entry)
-                    messages.success(request, f'L\'article a été ajouté à la wishlist "{wishlist.name}".')
-                except Wishlist.DoesNotExist:
-                    messages.error(request, "La wishlist sélectionnée n'existe pas.")
-                    return redirect('toggle-wishlist', pk=pk)  # Si wishlist inexistante, on reste sur la page actuelle
-
-            # **Redirection vers la page d'accueil** après le traitement
-            return redirect('blog-home')  # Redirige vers la page d'accueil après ajout à wishlist
-
         except Entry.DoesNotExist:
             messages.error(request, "L'article n'existe pas.")
-            return redirect('blog-home')  # Si l'article n'existe pas, redirection vers la page d'accueil
+            return redirect('blog-home')
+
+        user_wishlists = Wishlist.objects.filter(user=request.user)
+        creating_new = not user_wishlists.exists()
+
+        if creating_new:
+            wishlist_name = request.POST.get("wishlist_name", "").strip()
+            if not wishlist_name:
+                messages.error(request, "Veuillez entrer un nom pour la wishlist.")
+                return self.get(request, pk)  # Rends la même page pour corriger
+
+            # Créer la wishlist
+            wishlist = Wishlist.objects.create(name=wishlist_name, user=request.user)
+            WishlistItem.objects.create(wishlist=wishlist, entry=entry)
+            messages.success(request, f'La wishlist "{wishlist.name}" a été créée et l\'article y a été ajouté.')
+
+        else:
+            wishlist_id = request.POST.get("wishlist")
+            if not wishlist_id:
+                messages.error(request, "Veuillez sélectionner une wishlist.")
+                return self.get(request, pk)  # Rends la même page pour corriger
+
+            try:
+                wishlist = Wishlist.objects.get(id=wishlist_id, user=request.user)
+            except Wishlist.DoesNotExist:
+                messages.error(request, "La wishlist sélectionnée n'existe pas.")
+                return self.get(request, pk)  # Rends la même page pour corriger
+
+            # Vérifie si l'article est déjà dans la wishlist
+            obj, created = WishlistItem.objects.get_or_create(wishlist=wishlist, entry=entry)
+            if created:
+                messages.success(request, f'L\'article a été ajouté à la wishlist "{wishlist.name}".')
+            else:
+                messages.info(request, f'L\'article est déjà dans la wishlist "{wishlist.name}".')
+
+        return redirect('wishlist-list')
 
 class CreateWishlistView(LoginRequiredMixin, CreateView):
     model = Wishlist

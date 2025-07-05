@@ -24,7 +24,7 @@ class Entry(models.Model):
      return f"{self.entry_title}"
     
 class Wishlist(models.Model):
-    name = models.CharField(max_length=255)  # ← Ce champ est nécessaire
+    name = models.CharField(max_length=255)  
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
